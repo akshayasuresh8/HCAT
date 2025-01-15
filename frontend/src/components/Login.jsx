@@ -26,7 +26,7 @@ const Login = () => {
         e.preventDefault();
         try {
             setLoading(true);
-            const res = await axios.post('https://euphora.onrender.com/api/v1/user/login', input, {
+            const res = await axios.post('http://localhost:8000/api/v1/user/login', input, {
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -55,12 +55,12 @@ const Login = () => {
         }
     },[])
     return (
-        <div className='flex items-center w-screen h-screen justify-center'>
+        <div className='flex items-center w-screen h-screen justify-center' style={{ background: 'url(/background.jpg) no-repeat center center fixed', backgroundSize: 'cover' }}>
             <form onSubmit={signupHandler} className='shadow-lg flex flex-col gap-5 p-8'>
-            <div className='my-4 text-center'>
-            <img src="/image.png" alt="LOGO" style={{ width: '300px', height: 'auto' }} />
-            <p className='text-sm'>Login to see photos & videos from your friends</p>
-        </div>
+                <div className='my-4 text-center'>
+                    <img src="/image.png" alt="LOGO" style={{ width: '300px', height: 'auto' }} />
+                    <p className='text-sm'>Login to see photos & videos from your friends</p>
+                </div>
                 <div>
                     <span className='font-medium'>Email</span>
                     <Input
