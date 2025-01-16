@@ -1,3 +1,4 @@
+
 import React from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { useSelector } from 'react-redux'
@@ -12,7 +13,9 @@ const RightSidebar = () => {
         <Link to={`/profile/${user?._id}`}>
           <Avatar>
             <AvatarImage src={user?.profilePicture} alt="post_image" />
-            <AvatarFallback>CN</AvatarFallback>
+            <AvatarFallback>
+            <img src="/profile.png" alt="Fallback Profile" />
+            </AvatarFallback>
           </Avatar>
         </Link>
         <div>
