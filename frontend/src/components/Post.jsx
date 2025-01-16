@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react' // Added useEffect import
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
-import { Dialog, DialogContent, DialogTrigger } from './ui/dialog'
-import { Bookmark, MessageCircle, MoreHorizontal, Send, Timer } from 'lucide-react'
-import { Button } from './ui/button'
+import React, { useState, useEffect } from 'react'; // Added useEffect import
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { Dialog, DialogContent, DialogTrigger } from './ui/dialog';
+import { Bookmark, MessageCircle, MoreHorizontal, Send, Timer } from 'lucide-react';
+import { Button } from './ui/button';
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-import CommentDialog from './CommentDialog'
-import { useDispatch, useSelector } from 'react-redux'
-import axios from 'axios'
-import { toast } from 'sonner'
-import { setPosts, setSelectedPost } from '@/redux/postSlice'
-import { Badge } from './ui/badge'
+import CommentDialog from './CommentDialog';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { toast } from 'sonner';
+import { setPosts, setSelectedPost } from '@/redux/postSlice';
+import { Badge } from './ui/badge';
 
 const Post = ({ post }) => {
     const [text, setText] = useState("");
@@ -61,7 +61,7 @@ const Post = ({ post }) => {
         } else {
             setText("");
         }
-    }
+    };
 
     const likeOrDislikeHandler = async () => {
         try {
@@ -84,7 +84,7 @@ const Post = ({ post }) => {
         } catch (error) {
             console.log(error);
         }
-    }
+    };
 
     const commentHandler = async () => {
         try {
@@ -109,11 +109,11 @@ const Post = ({ post }) => {
         } catch (error) {
             console.log(error);
         }
-    }
+    };
 
     const deletePostHandler = async () => {
         try {
-            const res = await axios.delete(`https://euphora.onrender.com/api/v1/post/delete/${post?._id}`, { withCredentials: true })
+            const res = await axios.delete(`https://euphora.onrender.com/api/v1/post/delete/${post?._id}`, { withCredentials: true });
             if (res.data.success) {
                 const updatedPostData = posts.filter((postItem) => postItem?._id !== post?._id);
                 dispatch(setPosts(updatedPostData));
@@ -121,20 +121,20 @@ const Post = ({ post }) => {
             }
         } catch (error) {
             console.log(error);
-            toast.error(error.response.data.messsage);
+            toast.error(error.response.data.message);
         }
-    }
+    };
 
     const bookmarkHandler = async () => {
         try {
-            const res = await axios.get(`https://euphora.onrender.com/api/v1/post/${post?._id}/bookmark`, {withCredentials:true});
-            if(res.data.success){
+            const res = await axios.get(`https://euphora.onrender.com/api/v1/post/${post?._id}/bookmark`, { withCredentials: true });
+            if (res.data.success) {
                 toast.success(res.data.message);
             }
         } catch (error) {
             console.log(error);
         }
-    }
+    };
 
     return (
         <div className='my-8 w-full max-w-sm mx-auto'>
@@ -142,9 +142,10 @@ const Post = ({ post }) => {
                 <div className='flex items-center gap-2'>
                     <Avatar>
                         <AvatarImage src={post.author?.profilePicture} alt="post_image" />
-                       <AvatarFallback>
-            <img src="/profile.png" alt="Fallback Profile" />
-            </AvatarFallback>
+                        <AvatarFallback>
+                            <img src="/profile.png" alt="Fallback Profile" />
+                        </AvatarFallback>
+                    </Avatar>
                     <div className='flex items-center gap-3'>
                         <h1>{post.author?.username}</h1>
                         {user?._id === post.author._id && <Badge variant="secondary">Author</Badge>}
@@ -221,7 +222,7 @@ const Post = ({ post }) => {
                 {text && <span onClick={commentHandler} className='text-[#3BADF8] cursor-pointer'>Post</span>}
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Post
+export default Post;
