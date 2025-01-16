@@ -26,7 +26,7 @@ const SuggestedUsers = () => {
                                 </Link>
                                 <div>
                                     <h1 className='font-semibold text-sm'><Link to={`/profile/${user?._id}`}>{user?.username}</Link></h1>
-                                    <span className='text-gray-600 text-sm'>{user?.bio || 'Bio here...'}</span>
+                                    <span className='text-gray-600 text-sm'>{user?.bio || 'No Bio'}</span>
                                 </div>
                             </div>
                             <span className='text-[#3BADF8] text-xs font-bold cursor-pointer hover:text-[#3495d6]'>Follow</span>
