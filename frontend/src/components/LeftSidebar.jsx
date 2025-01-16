@@ -21,7 +21,7 @@ const LeftSidebar = () => {
 
     const logoutHandler = async () => {
         try {
-            const res = await axios.get('https://euphora.onrender.com/api/v1/user/logout', { withCredentials: true });
+            const res = await axios.get('http://localhost:8000/api/v1/user/logout', { withCredentials: true });
             if (res.data.success) {
                 dispatch(setAuthUser(null));
                 dispatch(setSelectedPost(null));
@@ -67,16 +67,16 @@ const LeftSidebar = () => {
         { icon: <LogOut />, text: "Logout" },
     ]
     return (
-        <div className='fixed top-0 z-10 left-0 px-4 border-r border-gray-300 w-[16%] h-screen'>
+        <div className='fixed top-0 z-10 left-0 px-4 border-r border-gray-300 w-[16%] h-screen ' style={{ backgroundColor: '#003151', color: 'white' }}>
             <div className='flex flex-col'>
-            <h1 className="my-8 pl-3 font-bold text-xl">
-        <img src="/image.png" alt="Logo" className="h-8 w-auto" />
-      </h1>
+                <h1 className="my-8 pl-3 font-bold text-xl">
+                    <img src="/sidebar1.png" alt="Logo" className="h-8 w-auto" />
+                </h1>
                 <div>
                     {
                         sidebarItems.map((item, index) => {
                             return (
-                                <div onClick={() => sidebarHandler(item.text)} key={index} className='flex items-center gap-3 relative hover:bg-gray-100 cursor-pointer rounded-lg p-3 my-3'>
+                                <div onClick={() => sidebarHandler(item.text)} key={index} className='flex items-center gap-3 relative hover:bg-gray-700 cursor-pointer rounded-lg p-3 my-3'>
                                     {item.icon}
                                     <span>{item.text}</span>
                                     {
@@ -113,11 +113,10 @@ const LeftSidebar = () => {
                     }
                 </div>
             </div>
-
+    
             <CreatePost open={open} setOpen={setOpen} />
-
+    
         </div>
-    )
-}
+    )}
 
 export default LeftSidebar
