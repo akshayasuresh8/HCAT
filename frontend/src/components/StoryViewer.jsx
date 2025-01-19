@@ -1,6 +1,5 @@
-// frontend/src/components/StoryViewer.jsx
 import React, { useEffect, useState } from 'react';
-import { Dialog, DialogContent } from './ui/dialog';
+import { Dialog } from './ui/dialog';
 import { useDispatch, useSelector } from 'react-redux';
 import { setActiveStoryIndex, setViewerOpen } from '@/redux/storySlice';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
@@ -40,7 +39,6 @@ const StoryViewer = () => {
             animationFrame = requestAnimationFrame(animate);
         };
 
-        // Mark story as viewed
         const markAsViewed = async () => {
             try {
                 await axios.post(
@@ -105,57 +103,60 @@ const StoryViewer = () => {
 
     return (
         <Dialog open={isViewerOpen} onOpenChange={handleClose}>
-            <DialogContent className="max-w-screen-md w-[100vw] h-[100vh] p-0 gap-0 bg-black relative">
-                {/* Progress Bars */}
-                <div className="absolute top-0 left-0 right-0 flex gap-1 p-2 z-10">
-                    {stories.map((story, index) => (
-                        <div 
-                            key={story._id} 
-                            className="h-1 flex-1 bg-gray-600 rounded overflow-hidden"
-                        >
+            <div className="fixed inset-0 bg-black flex items-center justify-center z-50">
+                <div className="relative w-full h-full max-w-3xl mx-auto">
+                    {/* Progress Bars */}
+                    <div className="absolute top-0 left-0 right-0 flex gap-1 p-2 z-10">
+                        {stories.map((story, index) => (
                             <div 
-                                className="h-full bg-white"
-                                style={{ 
-                                    width: `${index === activeStoryIndex ? progress : index < activeStoryIndex ? 100 : 0}%`,
-                                    transition: index === activeStoryIndex ? 'width 0.1s linear' : 'none'
-                                }}
-                            />
-                        </div>
-                    ))}
-                </div>
-
-                {/* Header */}
-                <div className="absolute top-0 left-0 right-0 flex justify-between items-center p-4 z-10">
-                    {/* User Info */}
-                    <div className="flex items-center gap-2">
-                        <Avatar className="w-8 h-8">
-                            <AvatarImage src={viewingStories.user.profilePicture} />
-                            <AvatarFallback>
-                                {viewingStories.user.username.slice(0, 2).toUpperCase()}
-                            </AvatarFallback>
-                        </Avatar>
-                        <div className="text-white">
-                            <p className="text-sm font-semibold">{viewingStories.user.username}</p>
-                            <p className="text-xs opacity-75">{timeSince}</p>
-                        </div>
+                                key={story._id} 
+                                className="h-1 flex-1 bg-gray-600 rounded overflow-hidden"
+                            >
+                                <div 
+                                    className="h-full bg-white"
+                                    style={{ 
+                                        width: `${index === activeStoryIndex ? progress : index < activeStoryIndex ? 100 : 0}%`,
+                                        transition: index === activeStoryIndex ? 'width 0.1s linear' : 'none'
+                                    }}
+                                />
+                            </div>
+                        ))}
                     </div>
 
-                    {/* Close Button */}
-                    <button 
-                        onClick={handleClose}
-                        className="text-white hover:opacity-75 transition-opacity"
-                    >
-                        <X className="h-6 w-6" />
-                    </button>
-                </div>
+                    {/* Header */}
+                    <div className="absolute top-0 left-0 right-0 flex justify-between items-center p-4 z-10">
+                        {/* User Info */}
+                        <div className="flex items-center gap-2">
+                            <Avatar className="w-8 h-8">
+                                <AvatarImage src={viewingStories.user.profilePicture} />
+                                <AvatarFallback>
+                                    {viewingStories.user.username.slice(0, 2).toUpperCase()}
+                                </AvatarFallback>
+                            </Avatar>
+                            <div className="text-white">
+                                <p className="text-sm font-semibold">{viewingStories.user.username}</p>
+                                <p className="text-xs opacity-75">{timeSince}</p>
+                            </div>
+                        </div>
 
-                {/* Story Content */}
-             <div className="relative w-full h-full flex items-center justify-center bg-black">
-                    <img 
-                        src={currentStory.media || "/placeholder.svg"} 
-                        alt="story"
-                        className="w-full h-full object-contain"
-                    />
+                        {/* Close Button */}
+                        <button 
+                            onClick={handleClose}
+                            className="text-white hover:opacity-75 transition-opacity"
+                        >
+                            <X className="h-6 w-6" />
+                        </button>
+                    </div>
+
+                    {/* Story Content */}
+                    <div className="w-full h-full flex items-center justify-center">
+                        <img 
+                            src={currentStory.media || "/placeholder.svg"} 
+                            alt="story"
+                            className="max-w-full max-h-full object-contain"
+                        />
+                    </div>
+
                     {/* Navigation Buttons */}
                     {activeStoryIndex > 0 && (
                         <button
@@ -185,9 +186,10 @@ const StoryViewer = () => {
                         onClick={handleNext}
                     />
                 </div>
-            </DialogContent>
+            </div>
         </Dialog>
     );
 };
 
 export default StoryViewer;
+
