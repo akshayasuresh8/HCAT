@@ -15,19 +15,19 @@ const CreatePost = ({ open, setOpen }) => {
     const imageRef = useRef();
     const [file, setFile] = useState("");
     const [caption, setCaption] = useState("");
-    const [duration, setDuration] = useState("permanent"); // New state for post duration
+    const [duration, setDuration] = useState("permanent");// New state for post duration
     const [imagePreview, setImagePreview] = useState("");
     const [loading, setLoading] = useState(false);
     const [dailyPostCount, setDailyPostCount] = useState(0);
-    const { user } = useSelector((store) => store.auth);
-    const { posts } = useSelector((store) => store.post);
+    const { user } = useSelector(store => store.auth);
+    const { posts } = useSelector(store => store.post);
     const dispatch = useDispatch();
 
     useEffect(() => {
         // Fetch the daily post count for the user
         const fetchDailyPostCount = async () => {
             try {
-                const res = await axios.get(`https://euphora.onrender.com/api/v1/post/dailyPostCount`, { withCredentials: true });
+                const res = await axios.get(`http://localhost:5000/api/v1/post/dailyPostCount`, { withCredentials: true });
                 if (res.data.success) {
                     setDailyPostCount(res.data.count);
                 }
@@ -46,9 +46,9 @@ const CreatePost = ({ open, setOpen }) => {
             const dataUrl = await readFileAsDataURL(file);
             setImagePreview(dataUrl);
         }
-    };
+    }
 
-    const createPostHandler = async () => {
+    const createPostHandler = async (e) => {
         if (dailyPostCount >= 5) {
             toast.error("You have reached the limit of 5 posts per day.");
             return;
@@ -56,100 +56,100 @@ const CreatePost = ({ open, setOpen }) => {
 
         const formData = new FormData();
         formData.append("caption", caption);
-        formData.append("duration", duration); // Add duration to the form data
+        if (duration !== "permanent") formData.append("duration", duration);
         if (imagePreview) formData.append("image", file);
 
         try {
             setLoading(true);
-            const res = await axios.post('https://euphora.onrender.com/api/v1/post/addpost', formData, {
+            const res = await axios.post('http://localhost:5000/api/v1/post/addpost', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },
                 withCredentials: true
             });
-
             if (res.data.success) {
-                // Prepend the new post to the existing posts array
-                dispatch(setPosts([res.data.post, ...posts].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))));
+                dispatch(setPosts([res.data.post, ...posts]));
                 toast.success(res.data.message);
                 setOpen(false);
-                setFile("");
-                setCaption("");
-                setImagePreview("");
             }
         } catch (error) {
-            toast.error(error.response?.data?.message || "Something went wrong. Please try again.");
+            toast.error(error.response.data.message);
         } finally {
             setLoading(false);
         }
-    };
+    }
 
     return (
         <Dialog open={open}>
             <DialogContent onInteractOutside={() => setOpen(false)}>
-                <DialogHeader className="text-center font-semibold">Create New Post</DialogHeader>
-                <div className="flex gap-3 items-center">
+                <DialogHeader className='text-center font-semibold'>Create New Post</DialogHeader>
+                <div className='flex gap-3 items-center'>
                     <Avatar>
                         <AvatarImage src={user?.profilePicture} alt="img" />
                         <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
                     <div>
-                        <h1 className="font-semibold text-xs">{user?.username}</h1>
-                        <span className="text-red-600 text-xs">You can have only up to 5 posts per day</span>
+                        <h1 className='font-semibold text-xs'>{user?.username}</h1>
+                        <span className='text-red-600 text-xs'>You can have only up to 5 posts per day</span>
                     </div>
                 </div>
-
-                <Textarea
-                    value={caption}
-                    onChange={(e) => setCaption(e.target.value)}
-                    className="focus-visible:ring-transparent border-none"
-                    placeholder="Write a caption..."
+                
+                <Textarea 
+                    value={caption} 
+                    onChange={(e) => setCaption(e.target.value)} 
+                    className="focus-visible:ring-transparent border-none" 
+                    placeholder="Write a caption..." 
                 />
 
                 {/* Duration Selector */}
                 <div className="flex items-center gap-2">
                     <Timer className="w-4 h-4" />
-                    <Select value={duration} onValueChange={setDuration}>
+                    <Select 
+                        value={duration} 
+                        onValueChange={setDuration}
+                        defaultValue="permanent"
+                    >
                         <SelectTrigger className="w-[180px]">
                             <SelectValue placeholder="Post duration" />
                         </SelectTrigger>
                         <SelectContent>
+                            <SelectItem value="permanent">No expiration</SelectItem>
                             <SelectItem value="1">1 hour</SelectItem>
-                            <SelectItem value="2">2 hours</SelectItem>
-                            <SelectItem value="8">8 hours</SelectItem>
-                            <SelectItem value="16">16 hours</SelectItem>
                             <SelectItem value="24">24 hours</SelectItem>
+                            <SelectItem value="48">48 hours</SelectItem>
+                            <SelectItem value="72">72 hours</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
 
                 {imagePreview && (
-                    <div className="w-full h-64 flex items-center justify-center">
-                        <img src={imagePreview} alt="preview_img" className="object-cover h-full w-full rounded-md" />
+                    <div className='w-full h-64 flex items-center justify-center'>
+                        <img src={imagePreview} alt="preview_img" className='object-cover h-full w-full rounded-md' />
                     </div>
                 )}
 
-                <input ref={imageRef} type="file" className="hidden" onChange={fileChangeHandler} />
-
-                <Button onClick={() => imageRef.current.click()} className="w-fit mx-auto bg-[#0095F6] hover:bg-[#258bcf]">
+                <input ref={imageRef} type='file' className='hidden' onChange={fileChangeHandler} />
+                
+                <Button 
+                    onClick={() => imageRef.current.click()} 
+                    className='w-fit mx-auto bg-[#0095F6] hover:bg-[#258bcf]'
+                >
                     Select from computer
                 </Button>
 
                 {imagePreview && (
                     loading ? (
                         <Button>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                             Please wait
                         </Button>
                     ) : (
-                        <Button onClick={createPostHandler} type="submit" className="w-full">
-                            Post
-                        </Button>
+                        <Button onClick={createPostHandler} type="submit" className="w-full">Post</Button>
                     )
                 )}
             </DialogContent>
         </Dialog>
-    );
-};
+    )
+}
 
 export default CreatePost;
