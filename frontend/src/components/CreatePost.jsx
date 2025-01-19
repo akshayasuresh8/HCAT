@@ -101,12 +101,14 @@ const CreatePost = ({ open, setOpen }) => {
                 <DialogHeader className='text-center font-semibold'>Create New Post</DialogHeader>
                 <div className='flex gap-3 items-center'>
                     <Avatar>
-                        <AvatarImage src={user?.profilePicture} alt="img" />
-                        <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
+                                        <AvatarImage src={user?.profilePicture} alt="post_image" />
+                                        <AvatarFallback>
+  <img src="profile.png" alt="Fallback Profile" />
+</AvatarFallback>
+                                    </Avatar>
                     <div>
                         <h1 className='font-semibold text-xs'>{user?.username}</h1>
-                        <span className='text-gray-600 text-xs'>Bio here...</span>
+                        <span className="text-red-600 text-xs">You can have only up to 5 posts per day</span>
                     </div>
                 </div>
                 
