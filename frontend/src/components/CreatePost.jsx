@@ -93,9 +93,11 @@ const CreatePost = ({ open, setOpen }) => {
                         <SelectContent>
                             <SelectItem value="permanent">No expiration</SelectItem>
                             <SelectItem value="1">1 hour</SelectItem>
+                            <SelectItem value="2">2 hours</SelectItem>
+                            <SelectItem value="4">4 hours</SelectItem>
+                            <SelectItem value="8">8 hours</SelectItem>
+                            <SelectItem value="16">16 hours</SelectItem>
                             <SelectItem value="24">24 hours</SelectItem>
-                            <SelectItem value="48">48 hours</SelectItem>
-                            <SelectItem value="72">72 hours</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
