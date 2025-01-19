@@ -15,7 +15,7 @@ const PopUp = ({ onClose }) => {
           <li>Follow community guidelines.</li>
           <li>
             <a
-              href="https://github.com/akshayasuresh8/HCAT/blob/main/frontend/public/index.html"
+              href="https://ggeorge185.github.io/Ephorainfo"
               className="text-blue-600"
               target="_blank"
               rel="noopener noreferrer"
