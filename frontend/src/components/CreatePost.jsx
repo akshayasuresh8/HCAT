@@ -27,7 +27,7 @@ const CreatePost = ({ open, setOpen }) => {
         // Fetch the daily post count for the user
         const fetchDailyPostCount = async () => {
             try {
-                const res = await axios.get(`http://localhost:8000/api/v1/post/dailyPostCount`, { withCredentials: true });
+                const res = await axios.get(`https://euphora.onrender.com/api/v1/post/dailyPostCount`, { withCredentials: true });
                 if (res.data.success) {
                     setDailyPostCount(res.data.count);
                 }
@@ -61,7 +61,7 @@ const CreatePost = ({ open, setOpen }) => {
 
         try {
             setLoading(true);
-            const res = await axios.post('http://localhost:8000/api/v1/post/addpost', formData, {
+            const res = await axios.post('https://euphora.onrender.com/api/v1/post/addpost', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },
