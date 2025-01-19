@@ -18,7 +18,6 @@ const LeftSidebar = () => {
     const dispatch = useDispatch();
     const [open, setOpen] = useState(false);
 
-
     const logoutHandler = async () => {
         try {
             const res = await axios.get('https://euphora.onrender.com/api/v1/user/logout', { withCredentials: true });
@@ -60,19 +59,20 @@ const LeftSidebar = () => {
                 <Avatar className='w-6 h-6'>
                     <AvatarImage src={user?.profilePicture} alt="@shadcn" />
                     <AvatarFallback>
-  <img src="/path/to/profile.png" alt="Fallback Profile" />
-</AvatarFallback>
+                        <img src="/path/to/profile.png" alt="Fallback Profile" />
+                    </AvatarFallback>
                 </Avatar>
             ),
             text: "Profile"
         },
         { icon: <LogOut />, text: "Logout" },
     ]
+
     return (
         <div className='fixed top-0 z-10 left-0 px-4 border-r border-gray-300 w-[16%] h-screen ' style={{ backgroundColor: '#003151', color: 'white' }}>
             <div className='flex flex-col'>
                 <h1 className="my-8 pl-3 font-bold text-xl">
-                    <img src="/sidebar1.png" alt="Logo" className="h-8 w-auto" />
+                    <img src="/sidebar1.png" alt="Logo" className="h-8 w-auto cursor-pointer" onClick={() => sidebarHandler("Home")} />
                 </h1>
                 <div>
                     {
@@ -115,10 +115,11 @@ const LeftSidebar = () => {
                     }
                 </div>
             </div>
-    
+
             <CreatePost open={open} setOpen={setOpen} />
-    
+
         </div>
-    )}
+    )
+}
 
 export default LeftSidebar
