@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react'
-import { Dialog, DialogContent, DialogHeader } from './ui/dialog'
+import React, { useRef, useState, useEffect } from 'react';
+import { Dialog, DialogContent, DialogHeader } from './ui/dialog';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Textarea } from './ui/textarea';
 import { Button } from './ui/button';
@@ -18,9 +18,26 @@ const CreatePost = ({ open, setOpen }) => {
     const [duration, setDuration] = useState("1 hour");// New state for post duration
     const [imagePreview, setImagePreview] = useState("");
     const [loading, setLoading] = useState(false);
-    const {user} = useSelector(store=>store.auth);
-    const {posts} = useSelector(store=>store.post);
+    const [dailyPostCount, setDailyPostCount] = useState(0);
+    const { user } = useSelector(store => store.auth);
+    const { posts } = useSelector(store => store.post);
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        // Fetch the daily post count for the user
+        const fetchDailyPostCount = async () => {
+            try {
+                const res = await axios.get(`https://euphora.onrender.com/api/v1/post/dailyPostCount`, { withCredentials: true });
+                if (res.data.success) {
+                    setDailyPostCount(res.data.count);
+                }
+            } catch (error) {
+                console.error("Failed to fetch daily post count:", error);
+            }
+        };
+
+        fetchDailyPostCount();
+    }, []);
 
     const fileChangeHandler = async (e) => {
         const file = e.target.files?.[0];
@@ -32,7 +49,11 @@ const CreatePost = ({ open, setOpen }) => {
     }
 
     const createPostHandler = async (e) => {
-        //Newly added for 24hrs 
+        if (dailyPostCount >= 5) {
+            toast.error("You have reached the limit of 5 posts per day.");
+            return;
+        }
+
         const allowedDurations = ["1", "4", "8", "12", "24"];
         if (!allowedDurations.includes(duration)) {
             toast.error("Invalid duration. Please select a valid duration.");
@@ -41,7 +62,6 @@ const CreatePost = ({ open, setOpen }) => {
 
         const formData = new FormData();
         formData.append("caption", caption);
-        //if (duration !== "permanent") 
         formData.append("duration", duration);
         if (imagePreview) formData.append("image", file);
 
