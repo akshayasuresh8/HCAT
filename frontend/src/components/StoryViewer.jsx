@@ -105,7 +105,7 @@ const StoryViewer = () => {
 
     return (
         <Dialog open={isViewerOpen} onOpenChange={handleClose}>
-            <DialogContent className="max-w-2xl h-[90vh] p-0 gap-0 bg-black relative">
+            <DialogContent className="max-w-screen-md w-[100vw] h-[100vh] p-0 gap-0 bg-black relative">
                 {/* Progress Bars */}
                 <div className="absolute top-0 left-0 right-0 flex gap-1 p-2 z-10">
                     {stories.map((story, index) => (
@@ -150,13 +150,12 @@ const StoryViewer = () => {
                 </div>
 
                 {/* Story Content */}
-                <div className="relative w-full h-full flex items-center justify-center bg-black">
+             <div className="relative w-full h-full flex items-center justify-center bg-black">
                     <img 
-                        src={currentStory.media} 
+                        src={currentStory.media || "/placeholder.svg"} 
                         alt="story"
-                        className="max-h-full w-auto object-contain"
+                        className="w-full h-full object-contain"
                     />
-
                     {/* Navigation Buttons */}
                     {activeStoryIndex > 0 && (
                         <button
