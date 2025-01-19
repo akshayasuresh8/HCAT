@@ -1,101 +1,155 @@
-import React, { useEffect, useState } from 'react'
-import { Input } from './ui/input'
-import { Button } from './ui/button'
-import axios from 'axios';
+import React, { useRef, useState, useEffect } from 'react';
+import { Dialog, DialogContent, DialogHeader } from './ui/dialog';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { Textarea } from './ui/textarea';
+import { Button } from './ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { readFileAsDataURL } from '@/lib/utils';
+import { Loader2, Timer } from 'lucide-react';
 import { toast } from 'sonner';
-import { Link, useNavigate } from 'react-router-dom';
-import { Loader2 } from 'lucide-react';
+import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { setAuthUser } from '@/redux/authSlice';
+import { setPosts } from '@/redux/postSlice';
 
-const Login = () => {
-    const [input, setInput] = useState({
-        email: "",
-        password: ""
-    });
+const CreatePost = ({ open, setOpen }) => {
+    const imageRef = useRef();
+    const [file, setFile] = useState("");
+    const [caption, setCaption] = useState("");
+    const [duration, setDuration] = useState("permanent"); // New state for post duration
+    const [imagePreview, setImagePreview] = useState("");
     const [loading, setLoading] = useState(false);
-    const {user} = useSelector(store=>store.auth);
-    const navigate = useNavigate();
+    const [dailyPostCount, setDailyPostCount] = useState(0);
+    const { user } = useSelector((store) => store.auth);
+    const { posts } = useSelector((store) => store.post);
     const dispatch = useDispatch();
 
-    const changeEventHandler = (e) => {
-        setInput({ ...input, [e.target.name]: e.target.value });
-    }
+    useEffect(() => {
+        // Fetch the daily post count for the user
+        const fetchDailyPostCount = async () => {
+            try {
+                const res = await axios.get(`http://localhost:8000/api/v1/post/dailyPostCount`, { withCredentials: true });
+                if (res.data.success) {
+                    setDailyPostCount(res.data.count);
+                }
+            } catch (error) {
+                console.error("Failed to fetch daily post count:", error);
+            }
+        };
 
-    const signupHandler = async (e) => {
-        e.preventDefault();
+        fetchDailyPostCount();
+    }, []);
+
+    const fileChangeHandler = async (e) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setFile(file);
+            const dataUrl = await readFileAsDataURL(file);
+            setImagePreview(dataUrl);
+        }
+    };
+
+    const createPostHandler = async () => {
+        if (dailyPostCount >= 5) {
+            toast.error("You have reached the limit of 5 posts per day.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("caption", caption);
+        formData.append("duration", duration); // Add duration to the form data
+        if (imagePreview) formData.append("image", file);
+
         try {
             setLoading(true);
-            const res = await axios.post('https://euphora.onrender.com/api/v1/user/login', input, {
+            const res = await axios.post('https://euphora.onrender.com/api/v1/post/addpost', formData, {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'multipart/form-data'
                 },
                 withCredentials: true
             });
+
             if (res.data.success) {
-                dispatch(setAuthUser(res.data.user));
-                navigate("/");
+                // Prepend the new post to the existing posts array
+                dispatch(setPosts([res.data.post, ...posts].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))));
                 toast.success(res.data.message);
-                setInput({
-                    email: "",
-                    password: ""
-                });
+                setOpen(false);
+                setFile("");
+                setCaption("");
+                setImagePreview("");
             }
         } catch (error) {
-            console.log(error);
-            toast.error(error.response.data.message);
+            toast.error(error.response?.data?.message || "Something went wrong. Please try again.");
         } finally {
             setLoading(false);
         }
-    }
+    };
 
-    useEffect(()=>{
-        if(user){
-            navigate("/");
-        }
-    },[])
     return (
-        <div className='flex items-center w-screen h-screen justify-center' style={{ background: 'url(/background.jpg) no-repeat center center fixed', backgroundSize: 'cover' }}>
-            <form onSubmit={signupHandler} className='shadow-lg flex flex-col gap-5 p-8'>
-                <div className='my-4 text-center'>
-                    <img src="/image.png" alt="LOGO" style={{ width: '300px', height: 'auto' }} />
-                    <p className='text-sm'>Login to see photos & videos from your friends</p>
+        <Dialog open={open}>
+            <DialogContent onInteractOutside={() => setOpen(false)}>
+                <DialogHeader className="text-center font-semibold">Create New Post</DialogHeader>
+                <div className="flex gap-3 items-center">
+                    <Avatar>
+                        <AvatarImage src={user?.profilePicture} alt="img" />
+                        <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                    <div>
+                        <h1 className="font-semibold text-xs">{user?.username}</h1>
+                        <span className="text-red-600 text-xs">You can have only up to 5 posts per day</span>
+                    </div>
                 </div>
-                <div>
-                    <span className='font-medium'>Email</span>
-                    <Input
-                        type="email"
-                        name="email"
-                        value={input.email}
-                        onChange={changeEventHandler}
-                        className="focus-visible:ring-transparent my-2"
-                    />
+
+                <Textarea
+                    value={caption}
+                    onChange={(e) => setCaption(e.target.value)}
+                    className="focus-visible:ring-transparent border-none"
+                    placeholder="Write a caption..."
+                />
+
+                {/* Duration Selector */}
+                <div className="flex items-center gap-2">
+                    <Timer className="w-4 h-4" />
+                    <Select value={duration} onValueChange={setDuration}>
+                        <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder="Post duration" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="permanent">No expiration</SelectItem>
+                            <SelectItem value="1">1 hour</SelectItem>
+                            <SelectItem value="24">24 hours</SelectItem>
+                            <SelectItem value="48">48 hours</SelectItem>
+                            <SelectItem value="72">72 hours</SelectItem>
+                        </SelectContent>
+                    </Select>
                 </div>
-                <div>
-                    <span className='font-medium'>Password</span>
-                    <Input
-                        type="password"
-                        name="password"
-                        value={input.password}
-                        onChange={changeEventHandler}
-                        className="focus-visible:ring-transparent my-2"
-                    />
-                </div>
-                {
+
+                {imagePreview && (
+                    <div className="w-full h-64 flex items-center justify-center">
+                        <img src={imagePreview} alt="preview_img" className="object-cover h-full w-full rounded-md" />
+                    </div>
+                )}
+
+                <input ref={imageRef} type="file" className="hidden" onChange={fileChangeHandler} />
+
+                <Button onClick={() => imageRef.current.click()} className="w-fit mx-auto bg-[#0095F6] hover:bg-[#258bcf]">
+                    Select from computer
+                </Button>
+
+                {imagePreview && (
                     loading ? (
                         <Button>
-                            <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                             Please wait
                         </Button>
                     ) : (
-                        <Button type='submit'>Login</Button>
+                        <Button onClick={createPostHandler} type="submit" className="w-full">
+                            Post
+                        </Button>
                     )
-                }
+                )}
+            </DialogContent>
+        </Dialog>
+    );
+};
 
-                <span className='text-center'>Dosent have an account? <Link to="/signup" className='text-blue-600'>Signup</Link></span>
-            </form>
-        </div>
-    )
-}
-
-export default Login
+export default CreatePost;
