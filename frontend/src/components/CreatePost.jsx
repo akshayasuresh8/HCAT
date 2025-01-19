@@ -49,6 +49,16 @@ const CreatePost = ({ open, setOpen }) => {
     }
 
     const createPostHandler = async (e) => {
+        // Fetch the latest daily post count to ensure accuracy
+        try {
+            const res = await axios.get(`https://euphora.onrender.com/api/v1/post/dailyPostCount`, { withCredentials: true });
+            if (res.data.success) {
+                setDailyPostCount(res.data.count);
+            }
+        } catch (error) {
+            console.error("Failed to fetch daily post count:", error);
+        }
+
         if (dailyPostCount >= 5) {
             toast.error("You have reached the limit of 5 posts per day.");
             return;
