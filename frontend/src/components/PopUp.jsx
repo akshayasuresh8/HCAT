@@ -11,7 +11,7 @@ const PopUp = ({ onClose }) => {
         <ul className='list-disc list-inside mb-4'>
           <li>Your posts,stories and messages would last only upto a day</li>
           <li>Do not post inappropriate content.</li>
-          <li>Follow community guidelines.</li> <Link to='/learn-more' className='text-blue-600'>Learn More</Link>
+          <li>Follow community guidelines.</li> <Link to='https://ggeorge185.github.io/Ephorainfo/' className='text-blue-600'>Learn More</Link>
         </ul>
         <div className='mt-4 text-center'>
         <Button onClick={onClose}>Continue</Button>
