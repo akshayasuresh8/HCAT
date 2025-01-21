@@ -47,6 +47,10 @@ const LeftSidebar = () => {
         }
     }
 
+    const handleNotificationClick = (notificationId) => {
+        dispatch(updateNotificationStatus(notificationId)); // Make sure to define this action in your redux slice
+    };
+
     const sidebarItems = [
         { icon: <Home />, text: "Home" },
         { icon: <Search />, text: "Search" },
@@ -93,7 +97,9 @@ const LeftSidebar = () => {
                                                                 likeNotification.length === 0 ? (<p>No new notification</p>) : (
                                                                     likeNotification.map((notification) => {
                                                                         return (
-                                                                            <div key={notification.userId} className='flex items-center gap-2 my-2'>
+                                                                            <div key={notification.userId} 
+                                                                                 className={`flex items-center gap-2 my-2 ${notification.clicked ? 'bg-gray-300' : ''}`}
+                                                                                 onClick={() => handleNotificationClick(notification.userId)}>
                                                                                 <Avatar>
                                                                                     <AvatarImage src={notification.userDetails?.profilePicture} />
                                                                                     <AvatarFallback>CN</AvatarFallback>
