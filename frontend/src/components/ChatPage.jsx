@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { setSelectedUser } from '@/redux/authSlice';
 import { Input } from './ui/input';
@@ -7,12 +7,12 @@ import { Button } from './ui/button';
 import { MessageCircleCode } from 'lucide-react';
 import Messages from './Messages';
 import axios from 'axios';
-import { setMessages, clearNewMessages } from '@/redux/chatSlice';
+import { setMessages } from '@/redux/chatSlice';
 
 const ChatPage = () => {
     const [textMessage, setTextMessage] = useState("");
     const { user, suggestedUsers, selectedUser } = useSelector(store => store.auth);
-    const { onlineUsers, messages, newMessages } = useSelector(store => store.chat);
+    const { onlineUsers, messages } = useSelector(store => store.chat);
     const dispatch = useDispatch();
 
     const sendMessageHandler = async (receiverId) => {
@@ -47,14 +47,8 @@ const ChatPage = () => {
                     {
                         suggestedUsers.map((suggestedUser) => {
                             const isOnline = onlineUsers.includes(suggestedUser?._id);
-                            const hasNewMessages = newMessages[suggestedUser?._id]?.length > 0;
                             return (
-                                <div 
-                                    onClick={() => {
-                                        dispatch(setSelectedUser(suggestedUser));
-                                        dispatch(clearNewMessages({ userId: suggestedUser?._id }));
-                                    }} 
-                                    className='flex gap-3 items-center p-3 hover:bg-gray-50 cursor-pointer'>
+                                <div onClick={() => dispatch(setSelectedUser(suggestedUser))} className='flex gap-3 items-center p-3 hover:bg-gray-50 cursor-pointer'>
                                     <Avatar className='w-14 h-14'>
                                         <AvatarImage src={suggestedUser?.profilePicture} />
                                         <AvatarFallback>CN</AvatarFallback>
@@ -63,12 +57,12 @@ const ChatPage = () => {
                                         <span className='font-medium'>{suggestedUser?.username}</span>
                                         <span className={`text-xs font-bold ${isOnline ? 'text-green-600' : 'text-red-600'} `}>{isOnline ? 'online' : 'offline'}</span>
                                     </div>
-                                    {hasNewMessages && <span className='text-red-600'>•</span>}
                                 </div>
                             )
                         })
                     }
                 </div>
+
             </section>
             {
                 selectedUser ? (
@@ -100,4 +94,4 @@ const ChatPage = () => {
     )
 }
 
-export default ChatPage;
+export default ChatPage
