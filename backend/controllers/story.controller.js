@@ -1,4 +1,3 @@
-// backend/controllers/story.controller.js
 import sharp from "sharp";
 import cloudinary from "../utils/cloudinary.js";
 import { Story } from "../models/story.model.js";
@@ -65,15 +64,8 @@ export const getUserStories = async (req, res) => {
 
 export const getAllStories = async (req, res) => {
     try {
-        const userId = req.id;
-        
-        // Get user's following list
-        const user = await User.findById(userId);
-        const following = user.following;
-
-        // Get stories from followed users and user's own stories
+        // Get all stories that have not expired
         const stories = await Story.find({
-            author: { $in: [...following, userId] },
             expiresAt: { $gt: new Date() }
         })
         .sort({ createdAt: -1 })
