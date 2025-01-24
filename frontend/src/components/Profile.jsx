@@ -29,7 +29,7 @@ const Profile = () => {
 
     const handleFollow = async () => {
         try {
-            await axios.post(`https://api.example.com/follow/${userProfile?._id}`, {}, { withCredentials: true });
+            await axios.post(`https://euphora.onrender.com/follow/${userProfile?._id}`, {}, { withCredentials: true });
             dispatch(followUser(userProfile?._id));
         } catch (error) {
             console.error("Follow error:", error);
@@ -38,7 +38,7 @@ const Profile = () => {
 
     const handleUnfollow = async () => {
         try {
-            await axios.post(`https://api.example.com/unfollow/${userProfile?._id}`, {}, { withCredentials: true });
+            await axios.post(`https://euphora.onrender.com/unfollow/${userProfile?._id}`, {}, { withCredentials: true });
             dispatch(unfollowUser(userProfile?._id));
         } catch (error) {
             console.error("Unfollow error:", error);
