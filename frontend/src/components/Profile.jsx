@@ -26,24 +26,24 @@ const Profile = () => {
     };
 
     const displayedPost = activeTab === 'posts' ? userProfile?.posts : userProfile?.bookmarks;
+const handleFollow = async () => {
+    try {
+        await axios.post(`https://euphora.onrender.com/api/followorunfollow/${userProfile?._id}`, {}, { withCredentials: true });
+        dispatch(followUser(userProfile?._id));
+    } catch (error) {
+        console.error("Follow error:", error);
+    }
+};
 
-    const handleFollow = async () => {
-        try {
-            await axios.post(`https://euphora.onrender.com/follow/${userProfile?._id}`, {}, { withCredentials: true });
-            dispatch(followUser(userProfile?._id));
-        } catch (error) {
-            console.error("Follow error:", error);
-        }
-    };
+const handleUnfollow = async () => {
+    try {
+        await axios.post(`https://euphora.onrender.com/api/followorunfollow/${userProfile?._id}`, {}, { withCredentials: true });
+        dispatch(unfollowUser(userProfile?._id));
+    } catch (error) {
+        console.error("Unfollow error:", error);
+    }
+};
 
-    const handleUnfollow = async () => {
-        try {
-            await axios.post(`https://euphora.onrender.com/unfollow/${userProfile?._id}`, {}, { withCredentials: true });
-            dispatch(unfollowUser(userProfile?._id));
-        } catch (error) {
-            console.error("Unfollow error:", error);
-        }
-    };
 
     return (
         <div className='flex max-w-5xl justify-center mx-auto pl-10'>
