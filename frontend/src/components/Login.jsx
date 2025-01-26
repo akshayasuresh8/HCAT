@@ -70,7 +70,7 @@ const Login = () => {
         <form onSubmit={signupHandler} className='shadow-lg flex flex-col gap-5 p-8'>
           <div className='my-4 text-center'>
             <img src='/image.png' alt='LOGO' style={{ width: '300px', height: 'auto' }} />
-            <p className='text-sm'>Login to see photos & videos from your friends</p>
+            <p className='text-sm'>Login to see photos from your friends</p>
           </div>
           <div>
             <span className='font-medium'>Email</span>
