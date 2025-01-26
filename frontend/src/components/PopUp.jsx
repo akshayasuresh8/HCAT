@@ -7,11 +7,11 @@ const PopUp = ({ onClose }) => {
       <div className='bg-white p-8 rounded-lg shadow-lg max-w-md w-full'>
         <h2 className='text-xl font-bold mb-4'>Welcome to Ephora</h2>
         <p className='mb-4'>
-          Ephora is a platform where you can share and view photos and videos with your friends and family, but whatever you do lasts for 24 hours. Please adhere to the following rules:
+          Ephora is a platform where you can share and view photos with your friends and family, but whatever you do lasts for 24 hours. Please adhere to the following rules:
         </p>
         <ul className='list-disc list-inside mb-4'>
-          <li>Your posts, stories, and messages will last only up to a day.</li>
-          <li>Do not post inappropriate content.</li>
+          <li>Your posts and stories, will last only up to a day.</li>
+          <li>Do not post any inappropriate content.</li>
           <li>Follow community guidelines.</li>
           <li>
             <a
