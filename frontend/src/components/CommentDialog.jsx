@@ -74,7 +74,7 @@ const CommentDialog = ({ open, setOpen }) => {
                 <Link>
                   <Avatar>
                     <AvatarImage src={selectedPost?.author?.profilePicture} />
-                    <AvatarFallback>CN</AvatarFallback>
+                    <AvatarFallback>  <img src="profile.png" alt="Fallback Profile" /></AvatarFallback>
                   </Avatar>
                 </Link>
                 <div>
