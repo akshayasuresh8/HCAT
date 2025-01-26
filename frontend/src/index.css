@@ -22,9 +22,9 @@
 /* Optional: Add animation for the gradient border */
 @keyframes gradientRotate {
     0% {
-        background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+        background: linear-gradient(45deg, #72caf9, #89b0c4, #bc1888, #0a4361, #cc2366);
     }
     100% {
-        background: linear-gradient(405deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+        background: linear-gradient(405deg, #72caf9,#89b0c4, #bc1888, #0a4361, #cc2366);
     }
 }
