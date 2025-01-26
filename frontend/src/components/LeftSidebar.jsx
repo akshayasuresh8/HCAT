@@ -44,6 +44,8 @@ const LeftSidebar = () => {
             navigate("/");
         } else if (textType === 'Messages') {
             navigate("/chat");
+        } else if (textType === 'Search') {
+            navigate("/search");
         }
     }
 
@@ -72,7 +74,7 @@ const LeftSidebar = () => {
     ]
 
     return (
-        <div className='fixed top-0 z-10 left-0 px-4 border-r border-gray-300 w-[16%] h-screen ' style={{ backgroundColor: '#003151', color: 'white' }}>
+        <div className='fixed top-0 z-10 left-0 px-4 border-r border-gray-300 w-[16%] h-screen overflow-y-auto' style={{ backgroundColor: '#003151', color: 'white' }}>
             <div className='flex flex-col justify-between h-full'>
                 <div>
                     <h1 className="my-8 pl-3 font-bold text-xl">
