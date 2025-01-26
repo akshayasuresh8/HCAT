@@ -28,7 +28,7 @@ const Messages = ({ selectedUser }) => {
                    messages && messages.map((msg) => {
                         return (
                             <div key={msg._id} className={`flex ${msg.senderId === user?._id ? 'justify-end' : 'justify-start'}`}>
-                                <div className={`p-2 rounded-lg max-w-xs break-words ${msg.senderId === user?._id ? 'bg-[#0a4361] text-white' : 'bg-gray-200 text-black'}`}>
+                                <div className={`p-2 rounded-lg max-w-xs break-words ${msg.senderId === user?._id ? 'bg-[#003151] text-white' : 'bg-gray-200 text-black'}`}>
                                     {msg.message}
                                 </div>
                             </div>
