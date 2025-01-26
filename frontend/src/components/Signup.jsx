@@ -58,7 +58,7 @@ const Signup = () => {
             <form onSubmit={signupHandler} className='shadow-lg flex flex-col gap-5 p-8'>
                 <div className='my-4 text-center'>
                     <img src="/image.png" alt="LOGO" style={{ width: '100px', height: 'auto' }} />
-                    <p className='text-sm text-center'>Signup to see photos & videos from your friends</p>
+                    <p className='text-sm text-center'>Signup to see photos from your friends</p>
                 </div>
                 <div>
                     <span className='font-medium'>Username</span>
