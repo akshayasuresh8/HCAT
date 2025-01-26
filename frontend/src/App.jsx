@@ -6,6 +6,7 @@ import Login from './components/Login'
 import MainLayout from './components/MainLayout'
 import Profile from './components/Profile'
 import Signup from './components/Signup'
+import SearchPage from './components/SearchPage' // Import SearchPage
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { io } from "socket.io-client";
 import { useDispatch, useSelector } from 'react-redux'
@@ -14,7 +15,6 @@ import { setOnlineUsers } from './redux/chatSlice'
 import { setLikeNotification } from './redux/rtnSlice'
 import ProtectedRoutes from './components/ProtectedRoutes'
 import StoryViewer from './components/StoryViewer';
-
 
 const browserRouter = createBrowserRouter([
   {
@@ -37,6 +37,10 @@ const browserRouter = createBrowserRouter([
         path: '/chat',
         element: <ProtectedRoutes><ChatPage /></ProtectedRoutes>
       },
+      {
+        path: '/search',
+        element: <ProtectedRoutes><SearchPage /></ProtectedRoutes> // Add SearchPage route
+      },
     ]
   },
   {
@@ -56,7 +60,7 @@ function App() {
 
   useEffect(() => {
     if (user) {
-      const socketio = io('https://euphora.onrender.com', {
+      const socketio = io('http://localhost:8000', {
         query: {
           userId: user?._id
         },
