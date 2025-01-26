@@ -88,8 +88,6 @@ const Profile = () => {
                                 {isLoggedInUserProfile ? (
                                     <>
                                         <Link to="/account/edit"><Button variant='secondary' className='hover:bg-gray-200 h-8'>Edit profile</Button></Link>
-                                        <Button variant='secondary' className='hover:bg-gray-200 h-8'>View archive</Button>
-                                        <Button variant='secondary' className='hover:bg-gray-200 h-8'>Ad tools</Button>
                                     </>
                                 ) : (
                                     isFollowing ? (
@@ -122,8 +120,6 @@ const Profile = () => {
                         <span className={`py-3 cursor-pointer ${activeTab === 'saved' ? 'font-bold' : ''}`} onClick={() => handleTabChange('saved')}>
                             SAVED
                         </span>
-                        <span className='py-3 cursor-pointer'>REELS</span>
-                        <span className='py-3 cursor-pointer'>TAGS</span>
                     </div>
                     <div className='grid grid-cols-3 gap-1'>
                         {displayedPost?.map((post) => (
